@@ -1,4 +1,4 @@
-package com.lirik.jdbc;
+package com.lirik.jdbc.firstconnection;
 
 import com.lirik.jdbc.util.ConnectionManager;
 import com.lirik.jdbc.util.ConnectionManagerDemo;
