@@ -4,11 +4,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class ConnectionManager {
+public final class ConnectionManagerDemo {
 
-    private static final String USERNAME_KEY = "database.username";
-    private static final String PASSWORD_KEY = "database.password";
-    private static final String URL_KEY = "database.url";
+    private static final String USERNAME = "postgres";
+    private static final String PASSWORD = "postgres";
+    private static final String URL = "jdbc:postgresql://localhost:5433/flight_repository";
 
     /**
      * В JAVA до 1.8 могут быть проблемы с драйверами подключаемыми через дополнительные библиотеки. Для этого создаем этот статический
@@ -24,15 +24,12 @@ public class ConnectionManager {
         }
     }
 
-    private ConnectionManager() {
+    private ConnectionManagerDemo() {
     }
 
     public static Connection open() {
         try {
-            return DriverManager.getConnection(
-                    PropertiesUtil.get(URL_KEY),
-                    PropertiesUtil.get(USERNAME_KEY),
-                    PropertiesUtil.get(PASSWORD_KEY));
+            return DriverManager.getConnection(URL, USERNAME, PASSWORD);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

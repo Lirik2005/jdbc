@@ -1,6 +1,7 @@
 package com.lirik.jdbc;
 
 import com.lirik.jdbc.util.ConnectionManager;
+import com.lirik.jdbc.util.ConnectionManagerDemo;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -24,16 +25,26 @@ public class JdbcRunner {
         }
 
         /**
-         * Для удобства создания подключения создаем утилитный класс ConnectionManager куда выносим наше подключение, обрабатываем
+         * Для удобства создания подключения создаем утилитный класс ConnectionManagerDemo куда выносим наше подключение, обрабатываем
          * исключение и в дальнейшем только вызываем его в блоке try-with-resources
          */
 
-        try (Connection openConnection = ConnectionManager.open()) {
-            System.out.println(openConnection.getTransactionIsolation());   // Выводим уровень изолированности транзакции (см. курс по SQL)
+        try (Connection openDemoConnection = ConnectionManagerDemo.open()) {
+            System.out.println(
+                    openDemoConnection.getTransactionIsolation());   // Выводим уровень изолированности транзакции (см. курс по SQL)
 
         }
 
+        /**
+         * Для ПРАВИЛЬНОГО подключения к базе данных создаем файл application.properties, где указываем креды для подключения; утилитный
+         * класс PropertiesUtil ОДИН РАЗ загружает этот файл в статическом блоке инициализации и позволяет нам в классе ConnectionManager
+         * получить доступ к данным для подключения. После чего мы создаем подключение, обрабатываем исключение и в дальнейшем вызываем
+         * его в блоке try-with-resources
+         */
 
+        try (Connection openUtilConnection = ConnectionManager.open()) {
+            System.out.println(
+                    openUtilConnection.getTransactionIsolation());   // Выводим уровень изолированности транзакции (см. курс по SQL)
+        }
     }
-
 }
