@@ -3,6 +3,7 @@ package com.lirik.jdbc.preparedstatement;
 import com.lirik.jdbc.util.ConnectionManager;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,6 +23,8 @@ public class JdbcPreparedStatement {
 
         List<Long> flightsBetween = getFlightsBetween(LocalDate.of(2020, 10, 1).atStartOfDay(), LocalDateTime.now());
         System.out.println(flightsBetween);
+        System.out.println();
+        checkMetaData();
     }
 
     private static List<Long> getFlightsBetween(LocalDateTime start, LocalDateTime end) throws SQLException {
@@ -82,7 +85,31 @@ public class JdbcPreparedStatement {
             }
         }
         return result;
-
     }
 
+    /**
+     * Таким образом мы получаем информацию о структуре нашей базы данных!!!
+     */
+
+    private static void checkMetaData() throws SQLException {
+        try (Connection connection = ConnectionManager.open()) {
+            DatabaseMetaData metaData = connection.getMetaData();
+            ResultSet catalogs = metaData.getCatalogs();
+            while (catalogs.next()) {
+                String catalog = catalogs.getString(1);
+                System.out.println(catalog);
+                ResultSet schemas = metaData.getSchemas();
+                while (schemas.next()) {
+                    String schema = schemas.getString("TABLE_SCHEM");
+                    System.out.println(schema);
+                    ResultSet tables = metaData.getTables(catalog, schema, "%", null);
+                    if (schema.equals("public")) {
+                        while (tables.next()) {
+                            System.out.println(tables.getString("TABLE_NAME"));
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
