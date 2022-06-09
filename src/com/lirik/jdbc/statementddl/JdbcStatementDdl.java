@@ -18,8 +18,8 @@ public class JdbcStatementDdl {
 
 
         String createDatabase = """
-                DROP DATABASE game;
-                """;
+                CREATE DATABASE game;
+                 """;
 
         /**
          * Соединение у statement открываем в блоке try-with-resources после создания нашего подключения к базе данных!!!
@@ -30,15 +30,14 @@ public class JdbcStatementDdl {
 
             /**
              * Метод execute() может выполнить любую строку (т.е. SQL-запрос).
-             * Операция ниже будет возвращать false, так как запрос у нас не select, но базу данных  создаст!!!
+             * Операция ниже будет возвращать false, так как запрос у нас ничего не возвращает как например запрос select, но базу данных
+             * создаст!!!
              * Через метод execute() можно выполнять любые sql-операции, НО в основном этим методом выполняют ТОЛЬКО DDL-операции!!!
              */
 
             boolean execute = statement.execute(createDatabase);
-            System.out.println(execute);
+            System.out.println(execute);}
 
-
-        }
     }
 
 }
